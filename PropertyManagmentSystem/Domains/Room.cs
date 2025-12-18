@@ -6,7 +6,104 @@ using System.Threading.Tasks;
 
 namespace PropertyManagmentSystem.Domains
 {
-    internal class Room
+    public class Room
     {
+        public int Id { get; private set; }
+        public string RoomNumber { get; private set; }
+        public decimal Area { get; private set; }
+        public int FloorNumber { get; private set; }
+        public string FinishingType { get; private set; }
+        public bool HasPhone { get; private set; }
+        public bool IsRented { get; private set; }
+        public int? CurrentAgreementId { get; private set; }
+
+        // Ссылка на Building (для навигации)
+        private int _buildingId;
+        public int BuildingId => _buildingId;
+
+        public Room(int id, string roomNumber, decimal area, int floorNumber,
+                    string finishingType, bool hasPhone)
+        {
+            Validate(roomNumber, area, floorNumber, finishingType);
+
+            Id = id;
+            RoomNumber = roomNumber;
+            Area = area;
+            FloorNumber = floorNumber;
+            FinishingType = finishingType;
+            HasPhone = hasPhone;
+            IsRented = false;
+        }
+
+        private void Validate(string roomNumber, decimal area, int floorNumber, string finishingType)
+        {
+            if (string.IsNullOrWhiteSpace(roomNumber))
+                throw new ArgumentException("Номер комнаты обязателен");
+            if (area <= 0)
+                throw new ArgumentException("Площадь должна быть положительной");
+            if (floorNumber <= 0)
+                throw new ArgumentException("Этаж должен быть положительным");
+            if (string.IsNullOrWhiteSpace(finishingType))
+                throw new ArgumentException("Тип отделки обязателен");
+        }
+
+        // Внутренний метод для установки Building (вызывается из Building.AddRoom)
+        internal void SetBuilding(Building building)
+        {
+            if (building == null)
+                throw new ArgumentNullException(nameof(building));
+
+            _buildingId = building.Id;
+        }
+
+        // Бизнес-методы
+        public void Rent(int agreementId)
+        {
+            if (IsRented)
+                throw new InvalidOperationException("Комната уже арендована");
+
+            IsRented = true;
+            CurrentAgreementId = agreementId;
+        }
+
+        public void Release()
+        {
+            IsRented = false;
+            CurrentAgreementId = null;
+        }
+
+        public void UpdateFinishing(string newFinishing)
+        {
+            if (string.IsNullOrWhiteSpace(newFinishing))
+                throw new ArgumentException("Тип отделки не может быть пустым");
+
+            FinishingType = newFinishing;
+        }
+
+        public void InstallPhone()
+        {
+            if (HasPhone)
+                throw new InvalidOperationException("Телефон уже установлен");
+
+            HasPhone = true;
+        }
+
+        public void RemovePhone()
+        {
+            if (!HasPhone)
+                throw new InvalidOperationException("Телефон не установлен");
+
+            HasPhone = false;
+        }
+
+        public bool CanBeRented() => !IsRented;
+    }
+
+    public enum FinishingType
+    {
+        Standard,       // Обычная
+        Improved,       // Улучшенная
+        Euro,           // Евроремонт
+        Luxury          // Люкс
     }
 }
