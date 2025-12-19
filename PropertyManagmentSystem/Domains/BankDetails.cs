@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PropertyManagmentSystem.Domains
+{
+    // Банковские реквизиты юридического лица
+    public class BankDetails : IEquatable<BankDetails>
+    {
+        public string BankName { get; }
+        public string AccountNumber { get; }
+
+        public BankDetails(string bankName, string accountNumber)
+        {
+            Validate(bankName, accountNumber);
+
+            BankName = bankName;
+            AccountNumber = accountNumber;
+        }
+
+        private void Validate(string bankName, string accountNumber)
+        {
+            if (string.IsNullOrWhiteSpace(bankName))
+                throw new ArgumentException("Название банка обязательно");
+            if (string.IsNullOrWhiteSpace(accountNumber) || accountNumber.Length < 5)
+                throw new ArgumentException("Номер счёта слишком короткий");
+        }
+
+        public bool Equals(BankDetails other)
+        {
+            if (other is null) return false;
+            return AccountNumber == other.AccountNumber;
+        }
+
+        public override bool Equals(object obj) => Equals(obj as BankDetails);
+        public override int GetHashCode() => AccountNumber.GetHashCode();
+
+        public override string ToString() => $"{BankName}, счёт {AccountNumber}";
+    }
+}
