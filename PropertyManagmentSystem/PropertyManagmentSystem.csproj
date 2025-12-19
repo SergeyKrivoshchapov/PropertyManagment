@@ -63,6 +63,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Domains\Agreement.cs" />
+    <Compile Include="Domains\Building.cs" />
+    <Compile Include="Domains\BankDetails.cs" />
+    <Compile Include="Domains\Contractor.cs" />
+    <Compile Include="Domains\IndividualContractor.cs" />
+    <Compile Include="Domains\LegalEntityContractor.cs" />
+    <Compile Include="Domains\PassportData.cs" />
+    <Compile Include="Domains\RentedItem.cs" />
+    <Compile Include="Domains\Room.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

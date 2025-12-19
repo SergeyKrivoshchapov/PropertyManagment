@@ -8,23 +8,23 @@ namespace PropertyManagmentSystem.Domains
 {
     public class Building
     {
-        // 1. СВОЙСТВА
+        // СВОЙСТВА
         public int Id { get; private set; }
         public string District { get; private set; }
         public string Address { get; private set; }
         public int FloorsCount { get; private set; }
         public string CommandantPhone { get; private set; }
 
-        // Комнаты (только ID для сериализации)
+        // Комнаты
         private List<Room> _rooms = new List<Room>();
         public IReadOnlyCollection<Room> Rooms => _rooms.AsReadOnly();
 
-        // 2. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+        // ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
         public int TotalRooms => _rooms.Count;
         public int AvailableRooms => _rooms.Count(r => !r.IsRented);
         public bool HasAvailableRooms => AvailableRooms > 0;
 
-        // 3. КОНСТРУКТОР
+        // КОНСТРУКТОР
         public Building(int id, string district, string address, int floorsCount, string phone)
         {
             Validate(district, address, floorsCount, phone);
@@ -48,19 +48,19 @@ namespace PropertyManagmentSystem.Domains
                 throw new ArgumentException("Телефон коменданта обязателен");
         }
 
-        // 4. МЕТОДЫ ДЛЯ КОМНАТ
+        // МЕТОДЫ ДЛЯ КОМНАТ
 
         public void AddRoom(Room room)
         {
             if (room == null)
                 throw new ArgumentNullException(nameof(room));
 
-            // Бизнес-правило: этаж комнаты не может превышать этажность здания
+            // этаж комнаты не может превышать этажность здания
             if (room.FloorNumber > FloorsCount)
                 throw new InvalidOperationException(
                     $"Этаж комнаты ({room.FloorNumber}) превышает этажность здания ({FloorsCount})");
 
-            // Бизнес-правило: номер комнаты должен быть уникальным в здании
+            // номер комнаты должен быть уникальным в здании
             if (_rooms.Any(r => r.RoomNumber == room.RoomNumber))
                 throw new InvalidOperationException(
                     $"Комната с номером '{room.RoomNumber}' уже существует в здании");
@@ -75,7 +75,7 @@ namespace PropertyManagmentSystem.Domains
             if (room == null)
                 throw new ArgumentException($"Комната с ID {roomId} не найдена");
 
-            // Бизнес-правило: нельзя удалить арендованную комнату
+            // нельзя удалить арендованную комнату
             if (room.IsRented)
                 throw new InvalidOperationException(
                     $"Нельзя удалить комнату '{room.RoomNumber}', так как она арендована");
@@ -88,7 +88,7 @@ namespace PropertyManagmentSystem.Domains
         public Room GetRoomByNumber(string roomNumber) =>
             _rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
 
-        // 5. МЕТОДЫ ДЛЯ ИЗМЕНЕНИЯ ЗДАНИЯ
+        // МЕТОДЫ ДЛЯ ИЗМЕНЕНИЯ ЗДАНИЯ
 
         public void ChangeDistrict(string newDistrict)
         {
@@ -112,11 +112,10 @@ namespace PropertyManagmentSystem.Domains
 
         private bool IsValidPhone(string phone)
         {
-            // Простая проверка - телефон должен содержать цифры
             return phone.Any(char.IsDigit) && phone.Length >= 5;
         }
 
-        // 6. БИЗНЕС-МЕТОДЫ
+        // БИЗНЕС-МЕТОДЫ
 
         public List<Room> GetAvailableRooms() =>
             _rooms.Where(r => !r.IsRented).ToList();
@@ -137,7 +136,7 @@ namespace PropertyManagmentSystem.Domains
         public decimal GetOccupancyRate() =>
             TotalRooms > 0 ? (decimal)_rooms.Count(r => r.IsRented) / TotalRooms : 0;
 
-        // 7. ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
+        // ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
 
         public bool ContainsRoom(int roomId) => _rooms.Any(r => r.Id == roomId);
 
