@@ -1,4 +1,5 @@
 ﻿using PropertyManagmentSystem.Application.DTOs;
+using PropertyManagmentSystem.Application.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace PropertyManagmentSystem.Application.Interfaces
         // Основные CRUD операции
         AgreementDto GetAgreementById(int id);
         IEnumerable<AgreementDto> GetAllAgreements();
-        void CreateAgreement(AgreementDto agreementDto);
-        void UpdateAgreement(AgreementDto agreementDto);
+        void CreateAgreement(CreateAgreementRequest request);
+        void UpdateAgreement(UpdateAgreementRequest request);
         void DeleteAgreement(int id);
 
         // Управление статусами
@@ -22,10 +23,10 @@ namespace PropertyManagmentSystem.Application.Interfaces
         void CompleteAgreement(int id);
 
         // Пролонгация (клонирование с новыми датами)
-        AgreementDto ProlongAgreement(int existingAgreementId, DateTime newStartDate, DateTime newEndDate);
+        AgreementDto ProlongAgreement(ProlongAgreementRequest request);
 
         // Управление арендуемыми помещениями в договоре
-        void AddRentedItemToAgreement(int agreementId, RentedItemDto rentedItemDto);
+        void AddRentedItemToAgreement(int agreementId, AddRentedItemRequest request);
         void RemoveRentedItemFromAgreement(int agreementId, int roomId);
 
         // Отчетность

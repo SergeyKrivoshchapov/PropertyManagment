@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PropertyManagmentSystem.Application.DTOs;
+using PropertyManagmentSystem.Application.Requests;
 
 namespace PropertyManagmentSystem.Application.Interfaces
 {
@@ -12,15 +13,15 @@ namespace PropertyManagmentSystem.Application.Interfaces
         // Здания
         BuildingDto GetBuildingById(int id);
         IEnumerable<BuildingDto> GetAllBuildings();
-        void AddBuilding(BuildingDto buildingDto);
-        void UpdateBuilding(BuildingDto buildingDto);
+        void AddBuilding(CreateBuildingRequest request);
+        void UpdateBuilding(UpdateBuildingRequest request);
         void DeleteBuilding(int id);
 
         // Комнаты
         RoomDto GetRoomById(int id);
         IEnumerable<RoomDto> GetRoomsByBuildingId(int buildingId);
-        void AddRoomToBuilding(int buildingId, RoomDto roomDto);
-        void UpdateRoom(RoomDto roomDto);
+        void AddRoomToBuilding(int buildingId, AddRoomRequest request);
+        void UpdateRoom(UpdateRoomRequest request);
         void RemoveRoomFromBuilding(int roomId);
 
         // Отчетность по зданиям

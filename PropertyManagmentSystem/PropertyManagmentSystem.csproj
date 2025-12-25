@@ -78,6 +78,17 @@
     <Compile Include="Application\Interfaces\IAgreementService.cs" />
     <Compile Include="Application\Interfaces\IBuildingService.cs" />
     <Compile Include="Application\Interfaces\IContractorService.cs" />
+    <Compile Include="Application\Requests\AddRentedItemRequest.cs" />
+    <Compile Include="Application\Requests\AddRoomRequest.cs" />
+    <Compile Include="Application\Requests\CreateAgreementRequest.cs" />
+    <Compile Include="Application\Requests\CreateBuildingRequest.cs" />
+    <Compile Include="Application\Requests\CreateIndividualContractorRequest.cs" />
+    <Compile Include="Application\Requests\CreateLegalEntityContractorRequest.cs" />
+    <Compile Include="Application\Requests\ProlongAgreementRequest.cs" />
+    <Compile Include="Application\Requests\UpdateAgreementRequest.cs" />
+    <Compile Include="Application\Requests\UpdateBuildingRequest.cs" />
+    <Compile Include="Application\Requests\UpdateContractorPhoneRequest.cs" />
+    <Compile Include="Application\Requests\UpdateRoomRequest.cs" />
     <Compile Include="Domains\Agreement.cs" />
     <Compile Include="Domains\Building.cs" />
     <Compile Include="Domains\BankDetails.cs" />
