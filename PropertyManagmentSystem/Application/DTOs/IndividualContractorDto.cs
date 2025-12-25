@@ -11,6 +11,6 @@ namespace PropertyManagmentSystem.Application.DTOs
     public class IndividualContractorDto : ContractorDto
     {
         public string FullName { get; set; }
-        public PassportDto Passport { get; set; }
+        public PassportDataDto Passport { get; set; }
     }
 }
