@@ -1,9 +1,12 @@
-﻿using System;
-using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PropertyManagmentSystem.Application.Interfaces;
 using PropertyManagmentSystem.Application.Services;
+using PropertyManagmentSystem.Infrastructure.Repositories;
+using PropertyManagmentSystem.Infrastructure.Interfaces;
 using PropertyManagmentSystem.ViewModels;
+using PropertyManagmentSystem.Views;
+using System;
+using System.Windows;
 
 namespace PropertyManagmentSystem
 {
@@ -11,15 +14,29 @@ namespace PropertyManagmentSystem
     {
         private readonly ServiceProvider _serviceProvider;
 
+        // Свойство для доступа к контейнеру из других мест
+        public static ServiceProvider ServiceProvider { get; private set; }
+
         public App()
         {
+            // Инициализируем XAML ресурсы и обработчики, определенные в App.xaml
+            InitializeComponent();
+
             var services = new ServiceCollection();
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
+            ServiceProvider = _serviceProvider; // Сохраняем для статического доступа
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
+            // Регистрация репозиториев
+            services.AddSingleton<BuildingRepository>();
+            services.AddSingleton<RoomRepository>();
+            services.AddSingleton<IIndividualContractorRepository, IndividualContractorRepository>();
+            services.AddSingleton<ILegalEntityContractorRepository, LegalEntityContractorRepository>();
+            services.AddSingleton<AgreementRepository>();
+
             // Регистрация сервисов
             services.AddSingleton<IBuildingService, BuildingService>();
             services.AddSingleton<IContractorService, ContractorService>();
@@ -30,19 +47,32 @@ namespace PropertyManagmentSystem
             services.AddSingleton<BuildingViewModel>();
             services.AddSingleton<ContractorViewModel>();
             services.AddSingleton<AgreementViewModel>();
-            services.AddTransient<CreateAgreementViewModel>(); // Transient для диалогов
+            services.AddTransient<CreateAgreementViewModel>();
+
+            // Views (UserControls)
+            services.AddTransient<BuildingView>();
+            services.AddTransient<ContractorView>();
+            services.AddTransient<AgreementView>();
 
             // Главное окно
             services.AddSingleton<MainWindow>();
+            services.AddSingleton<IContractorIdGenerator, ContractorIdGenerator>();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
-            base.OnStartup(e);
-
             var mainWindow = _serviceProvider.GetService<MainWindow>();
+
+            // Устанавливаем DataContext через DI
             mainWindow.DataContext = _serviceProvider.GetService<MainViewModel>();
+
             mainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _serviceProvider.Dispose();
+            base.OnExit(e);
         }
     }
 }

@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PropertyManagmentSystem.Views
 {
     /// <summary>
-    /// Логика взаимодействия для AgreementWindow.xaml
+    /// Логика взаимодействия для ContractorView.xaml
     /// </summary>
-    public partial class AgreementWindow : Window
+    public partial class ContractorView : UserControl
     {
-        public AgreementWindow()
+        public ContractorView()
         {
             InitializeComponent();
         }

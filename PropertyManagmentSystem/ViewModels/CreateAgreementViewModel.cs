@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using PropertyManagmentSystem.Application.DTOs;
+﻿using PropertyManagmentSystem.Application.DTOs;
 using PropertyManagmentSystem.Application.Interfaces;
 using PropertyManagmentSystem.Application.Requests;
 using PropertyManagmentSystem.Domains;
